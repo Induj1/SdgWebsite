@@ -1,0 +1,391 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* MIT-BLR SDG Club Design System - UN SDG Colors & Modern UI */
+
+@layer base {
+  :root {
+    /* Core Background & Text */
+    --background: 0 0% 100%;
+    --foreground: 217 33% 17%;
+
+    /* Card System */
+    --card: 0 0% 100%;
+    --card-foreground: 217 33% 17%;
+
+    /* Popover System */
+    --popover: 0 0% 100%;
+    --popover-foreground: 217 33% 17%;
+
+    /* SDG Primary Colors - Based on UN SDG Palette */
+    --primary: 217 91% 60%; /* SDG Blue */
+    --primary-foreground: 0 0% 100%;
+    
+    --secondary: 142 76% 36%; /* SDG Green */
+    --secondary-foreground: 0 0% 100%;
+
+    /* UI System Colors */
+    --muted: 210 40% 98%;
+    --muted-foreground: 215 16% 47%;
+
+    --accent: 217 91% 95%; /* Light SDG Blue */
+    --accent-foreground: 217 91% 60%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 217 91% 60%;
+
+    --radius: 0.5rem;
+
+    --sidebar-background: 0 0% 98%;
+
+    --sidebar-foreground: 240 5.3% 26.1%;
+
+    --sidebar-primary: 240 5.9% 10%;
+
+    --sidebar-primary-foreground: 0 0% 98%;
+
+    --sidebar-accent: 240 4.8% 95.9%;
+
+    --sidebar-accent-foreground: 240 5.9% 10%;
+
+    --sidebar-border: 220 13% 91%;
+
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    --background: 217 33% 17%;
+    --foreground: 0 0% 98%;
+
+    --card: 217 33% 17%;
+    --card-foreground: 0 0% 98%;
+
+    --popover: 217 33% 17%;
+    --popover-foreground: 0 0% 98%;
+
+    --primary: 217 91% 70%; /* Lighter SDG Blue for dark mode */
+    --primary-foreground: 217 33% 17%;
+
+    --secondary: 142 76% 46%; /* Slightly lighter SDG Green */
+    --secondary-foreground: 0 0% 98%;
+
+    --muted: 217 32% 25%;
+    --muted-foreground: 215 20% 70%;
+
+    --accent: 217 32% 25%;
+    --accent-foreground: 217 91% 70%;
+
+    --destructive: 0 62% 50%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 217 32% 25%;
+    --input: 217 32% 25%;
+    --ring: 217 91% 70%;
+    --sidebar-background: 217 33% 15%;
+    --sidebar-foreground: 0 0% 95%;
+    --sidebar-primary: 217 91% 60%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 217 32% 20%;
+    --sidebar-accent-foreground: 0 0% 95%;
+    --sidebar-border: 217 32% 20%;
+    --sidebar-ring: 217 91% 70%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-inter antialiased;
+  }
+}
+
+/* SDG Color System - All 17 UN SDG Colors */
+:root {
+  /* SDG Goal Colors */
+  --sdg-1: 0 85% 58%;     /* No Poverty - Red */
+  --sdg-2: 45 98% 51%;    /* Zero Hunger - Orange */
+  --sdg-3: 142 76% 36%;   /* Good Health - Green */
+  --sdg-4: 0 84% 42%;     /* Quality Education - Dark Red */
+  --sdg-5: 350 84% 42%;   /* Gender Equality - Pink/Red */
+  --sdg-6: 195 100% 72%;  /* Clean Water - Cyan */
+  --sdg-7: 45 100% 50%;   /* Affordable Energy - Yellow */
+  --sdg-8: 335 84% 42%;   /* Decent Work - Burgundy */
+  --sdg-9: 15 84% 42%;    /* Industry Innovation - Orange/Red */
+  --sdg-10: 295 84% 42%;  /* Reduced Inequalities - Purple */
+  --sdg-11: 45 84% 42%;   /* Sustainable Cities - Orange */
+  --sdg-12: 45 84% 32%;   /* Responsible Consumption - Dark Orange */
+  --sdg-13: 142 46% 26%;  /* Climate Action - Dark Green */
+  --sdg-14: 217 91% 60%;  /* Life Below Water - Blue */
+  --sdg-15: 142 56% 36%;  /* Life on Land - Green */
+  --sdg-16: 217 71% 50%;  /* Peace Justice - Blue */
+  --sdg-17: 217 31% 40%;  /* Partnerships - Dark Blue */
+
+  /* Gradients */
+  --gradient-sdg: linear-gradient(135deg, hsl(var(--sdg-14)), hsl(var(--sdg-3)), hsl(var(--sdg-2)));
+  --gradient-hero: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--secondary)));
+  --gradient-card: linear-gradient(145deg, hsl(var(--background)), hsl(var(--accent)));
+  
+  /* Shadows */
+  --shadow-sdg: 0 10px 30px -10px hsl(var(--primary) / 0.3);
+  --shadow-card: 0 4px 15px -2px hsl(var(--foreground) / 0.1);
+  --shadow-glow: 0 0 40px hsl(var(--primary) / 0.4);
+  
+  /* Animations */
+  --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-bounce: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+/* Custom Animation Classes */
+@layer utilities {
+  .animate-fade-in-up {
+    animation: fadeInUp 0.6s ease-out;
+  }
+  
+  .animate-scale-in {
+    animation: scaleIn 0.3s ease-out;
+  }
+  
+  .animate-gradient {
+    animation: gradientShift 3s ease infinite;
+    background-size: 200% 200%;
+  }
+  
+  .hover-lift {
+    transition: var(--transition-smooth);
+  }
+  
+  .hover-lift:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-sdg);
+  }
+  
+  .sdg-gradient {
+    background: var(--gradient-sdg);
+  }
+  
+  .hero-gradient {
+    background: var(--gradient-hero);
+  }
+  
+  .card-gradient {
+    background: var(--gradient-card);
+  }
+  
+  .text-gradient {
+    background: var(--gradient-sdg);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+}
+
+/* Keyframe Animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes floatSlow {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-15px) rotate(2deg); }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Animation Utility Classes */
+.animate-fade-in-up {
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
+.animate-scale-in {
+  animation: scaleIn 0.5s ease-out forwards;
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-float-slow {
+  animation: floatSlow 4s ease-in-out infinite;
+}
+
+.animate-pulse-soft {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.animate-slide-in-right {
+  animation: slideInRight 0.6s ease-out forwards;
+}
+
+.animate-slide-in-left {
+  animation: slideInLeft 0.6s ease-out forwards;
+}
+
+/* Hover Effects */
+.hover-lift {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hover-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.hover-glow:hover {
+  box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+}
+
+/* Background Patterns */
+.bg-dots {
+  background-image: radial-gradient(circle at 1px 1px, rgba(59, 130, 246, 0.1) 1px, transparent 0);
+  background-size: 20px 20px;
+}
+
+.bg-grid {
+  background-image: 
+    linear-gradient(rgba(59, 130, 246, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(59, 130, 246, 0.1) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+/* Floating Elements */
+.floating-element {
+  position: absolute;
+  opacity: 0.1;
+  z-index: -1;
+}
+
+.floating-sdg-1 {
+  top: 10%;
+  left: 5%;
+  animation: floatSlow 6s ease-in-out infinite;
+}
+
+.floating-sdg-2 {
+  top: 20%;
+  right: 10%;
+  animation: float 4s ease-in-out infinite 1s;
+}
+
+.floating-sdg-3 {
+  bottom: 30%;
+  left: 8%;
+  animation: floatSlow 5s ease-in-out infinite 2s;
+}
+
+.floating-sdg-4 {
+  bottom: 15%;
+  right: 5%;
+  animation: float 7s ease-in-out infinite 3s;
+}
+
+/* Status Progress Indicators */
+.progress-step {
+  position: relative;
+}
+
+.progress-step::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: -20px;
+  width: 40px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent 0%, rgba(59, 130, 246, 0.3) 50%, transparent 100%);
+  transform: translateY(-50%);
+}
+
+.progress-step:last-child::after {
+  display: none;
+}
+
+/* Enhanced Cards */
+.card-gradient {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(249, 250, 251, 0.9) 100%);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Form Enhancements */
+.form-step {
+  opacity: 0;
+  transform: translateX(20px);
+  animation: slideInRight 0.5s ease-out forwards;
+}
+
+.form-step.prev {
+  animation: slideInLeft 0.5s ease-out forwards;
+}
+
+/* Loading States */
+.loading-shimmer {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
