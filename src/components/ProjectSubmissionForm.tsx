@@ -11,7 +11,7 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/component
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { 
   Plus, Send, ChevronDown, ChevronUp, Upload, X, 
-  Lightbulb, Users, Clock, DollarSign, Target,
+  Lightbulb, Users, Clock, Target,
   UserPlus, Trash2, FileText, Loader2, AlertCircle
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -208,7 +208,6 @@ const ProjectSubmissionForm: React.FC = () => {
     setError('');
     
     try {
-      // Prepare submission data for Supabase
       const submissionData = {
         name: formData.name,
         email: formData.email,
@@ -223,13 +222,12 @@ const ProjectSubmissionForm: React.FC = () => {
         timeline: formData.timeline,
         expected_impact: formData.impact,
         team_members: formData.teamMembers,
-        attachments: formData.attachments.map(file => file.name), // Store file names for now
+        attachments: formData.attachments.map(file => file.name),
         status: 'received' as const,
         stage: 0,
         admin_notes: '',
         feedback: '',
-        // Add metadata
-        submission_ip: undefined, // This would be populated server-side
+        submission_ip: undefined,
         user_agent: navigator.userAgent
       };
 

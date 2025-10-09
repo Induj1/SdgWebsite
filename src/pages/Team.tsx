@@ -29,8 +29,8 @@ const Team = () => {
       role: "President",
       description: "Leading the SDG Club with passion for sustainable innovation and environmental impact.",
       image: indujImage,
-      email: "induj@mitblr.edu.in",
-      linkedin: "#",
+      email: "induj.mitblr2023@learner.manipal.edu",
+      linkedin: "https://www.linkedin.com/in/induj-gupta-35382752/",
       specialties: ["Leadership", "Environmental Science", "Innovation"]
     },
     {
@@ -107,7 +107,14 @@ const Team = () => {
   const maxSlide = Math.max(0, teamMembers.length - cardsPerView);
   
   const nextSlide = () => {
-    setCurrentSlide((prev) => (prev >= maxSlide ? 0 : prev + 1));
+    setCurrentSlide((prev) => {
+      if (prev === 0) {
+        // Show Induj's slide for longer time
+        setTimeout(() => setCurrentSlide(1), 6000);
+        return prev;
+      }
+      return prev >= maxSlide ? 0 : prev + 1;
+    });
   };
 
   const prevSlide = () => {
@@ -357,13 +364,7 @@ const Team = () => {
                           </div>
                         </div>
                         
-                        {/* Action Button */}
-                        <Button 
-                          className="w-full mt-4 bg-gradient-to-r from-blue-600 to-green-600 hover:from-blue-700 hover:to-green-700 text-white font-medium transition-all duration-300 shadow-md hover:shadow-lg"
-                          size="sm"
-                        >
-                          Connect
-                        </Button>
+                        {/* Removed Connect button */}
                       </CardContent>
 
                       {/* Decorative Elements */}
@@ -496,7 +497,7 @@ const Team = () => {
                 <div className="text-sm text-gray-600">SDG Goals</div>
               </div>
               <div className="text-center">
-                <div className="text-2xl font-bold text-secondary mb-1">5+</div>
+                <div className="text-2xl font-bold text-secondary mb-1">1+</div>
                 <div className="text-sm text-gray-600">Years Impact</div>
               </div>
               <div className="text-center">

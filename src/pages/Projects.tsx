@@ -1,5 +1,5 @@
 ﻿import React from 'react';
-import { ArrowLeft, Lightbulb, Rocket, Users, DollarSign, TrendingUp, Award } from 'lucide-react';
+import { ArrowLeft, Lightbulb, Rocket, Users, TrendingUp, Award } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -63,14 +63,7 @@ const Projects = () => {
             </p>
           </div>
 
-          <div className="grid lg:grid-cols-4 gap-6 mb-12">
-            <Card className="text-center hover-lift">
-              <CardContent className="p-6">
-                <DollarSign className="w-12 h-12 text-primary mx-auto mb-4" />
-                <h3 className="font-semibold mb-2">Funding Support</h3>
-                <p className="text-sm text-muted-foreground">Up to ₹10L funding for promising projects</p>
-              </CardContent>
-            </Card>
+          <div className="grid lg:grid-cols-3 gap-6 mb-12">
             <Card className="text-center hover-lift">
               <CardContent className="p-6">
                 <Users className="w-12 h-12 text-primary mx-auto mb-4" />
@@ -82,7 +75,7 @@ const Projects = () => {
               <CardContent className="p-6">
                 <Rocket className="w-12 h-12 text-primary mx-auto mb-4" />
                 <h3 className="font-semibold mb-2">Technical Support</h3>
-                <p className="text-sm text-muted-foreground">Access to labs, equipment, and resources</p>
+                <p className="text-sm text-muted-foreground">Access cutting-edge tools and resources</p>
               </CardContent>
             </Card>
             <Card className="text-center hover-lift">

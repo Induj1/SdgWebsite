@@ -10,35 +10,36 @@ const Events = () => {
   const events = {
     upcoming: [
       {
-        id: 1,
-        title: "SDG Hackathon 2025",
-        description: "48-hour innovation challenge focused on climate action and sustainable cities",
-        date: "Sept 25-27, 2025",
-        venue: "MIT-BLR Campus",
-        participants: "200+ Teams",
-        category: "hackathon",
-        sdg: [11, 13, 9],
-        status: "Open Registration",
-        countdown: "5 days to go"
-      },
-      {
         id: 2,
         title: "Sustainability Conclave",
         description: "Industry leaders discuss the future of sustainable technology and innovation",
-        date: "October 28, 2025",
+        date: "January 15, 2026",
         time: "2:00 PM - 5:00 PM",
         venue: "Virtual & Campus",
         participants: "500+ Expected",
         category: "conclave",
         sdg: [17, 9, 8],
         status: "Early Bird",
-        countdown: "38 days to go"
       },
+      {
+        id: 11,
+        title: "SDG Thrift Store",
+        description: "Campus-wide thrift store to promote circular economy and sustainable fashion—buy, sell, and swap pre-loved items.",
+        date: "October 29, 2025",
+        time: "10:00 AM - 6:00 PM",
+        venue: "Student Activity Center",
+        participants: "Open to All",
+        category: "stall",
+        sdg: [12, 11],
+        status: "Register Now",
+        countdown: "20 days to go"
+      }
+      ,
       {
         id: 3,
         title: "Clean Energy Workshop",
         description: "Hands-on workshop on renewable energy technologies and implementation",
-        date: "November 15, 2025",
+        date: "January 25, 2025",
         time: "10:00 AM - 4:00 PM",
         venue: "Engineering Lab 3",
         participants: "50 Seats",
@@ -63,6 +64,19 @@ const Events = () => {
       }
     ],
     past: [
+      {
+        id: 10,
+        title: "SDG Hackathon 2025",
+        description: "A high-energy, campus-wide hackathon tackling Sustainable Development Goals with student teams building prototypes and pitching to mentors.",
+        date: "September 25-27, 2025",
+        time: "48-72 Hours",
+        venue: "MIT-BLR Campus",
+        participants: "300+ Participants",
+        category: "hackathon",
+        sdg: [9, 13, 17],
+        status: "Completed",
+        countdown: "Highlights & Winners"
+      },
       {
         id: 5,
         title: "HackVerse Hackathon",

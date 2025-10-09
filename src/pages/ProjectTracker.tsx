@@ -172,9 +172,9 @@ const ProjectTracker = () => {
                     )}
 
                     <div className="text-center text-sm text-muted-foreground">
-                      <p>Don't have your submission ID? Check your confirmation email or contact us at{' '}
-                        <a href="mailto:projects@mitblrsdg.club" className="text-primary hover:underline">
-                          projects@mitblrsdg.club
+                      <p>Don't have your submission ID? Check your confirmation email or contact us on WhatsApp at{' '}
+                        <a href="https://wa.me/9569406171" className="text-primary hover:underline">
+                          9569406171
                         </a>
                       </p>
                     </div>
@@ -199,7 +199,7 @@ const ProjectTracker = () => {
                     <div className="text-sm text-muted-foreground space-y-2">
                       <p>• Your submission ID was sent to your email after submitting your project</p>
                       <p>• The ID format is: SDG-YYYY-XXX (e.g., SDG-2024-001)</p>
-                      <p>• Contact us at <a href="mailto:projects@mitblrsdg.club" className="text-primary hover:underline">projects@mitblrsdg.club</a> if you need assistance</p>
+                      <p>• Contact us on WhatsApp at <a href="https://wa.me/9569406171" className="text-primary hover:underline">9569406171</a> if you need assistance</p>
                     </div>
                   </CardContent>
                 </Card>
