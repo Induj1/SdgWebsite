@@ -12,7 +12,7 @@ const Hero = () => {
       <div className="absolute inset-0 bg-grid-white/[0.02] bg-[size:50px_50px]"></div>
       
       {/* Content */}
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+  <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-32">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           
           {/* Left Column - Text Content */}
@@ -85,30 +85,7 @@ const Hero = () => {
         </div>
       </div>
 
-      {/* Floating Action Buttons */}
-      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex flex-col items-center gap-4">
-        {/* Project Submission CTA */}
-        <Button
-          className="hero-gradient text-white font-medium hover-lift shadow-lg px-6 py-3 rounded-full"
-          onClick={() => window.location.href = '/projects?tab=pitch'}
-        >
-          <Lightbulb className="mr-2 h-5 w-5" />
-          Submit Your Project Idea
-        </Button>
-        
-        {/* Scroll Indicator */}
-        <Button
-          variant="ghost"
-          size="sm"
-          className="rounded-full bg-background/80 backdrop-blur-sm hover:bg-background animate-bounce"
-          onClick={() => document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' })}
-        >
-          <div className="flex flex-col items-center">
-            <span className="text-xs text-muted-foreground mb-1">Scroll</span>
-            <ArrowRight className="h-4 w-4 rotate-90" />
-          </div>
-        </Button>
-      </div>
+      {/* Floating CTA removed per request */}
     </section>
   );
 };

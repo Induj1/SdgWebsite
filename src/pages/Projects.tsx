@@ -7,14 +7,15 @@ import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import ProjectSubmissionForm from '@/components/ProjectSubmissionForm';
 import sdgLogo from '@/assets/sdg-club-logo.png';
+import Mentor from './Mentor';
 
 const Projects = () => {
   return (
     <div className="min-h-screen">
       <Navigation />
-      
-      <section className="pt-24 pb-12 hero-gradient text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+      <section className="pt-28 pb-20 hero-gradient text-white min-h-[360px]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="flex items-center gap-4 mb-6">
             <Link to="/">
               <Button 
@@ -41,14 +42,24 @@ const Projects = () => {
             <p className="text-lg text-white/90 mb-6">
               Join us in creating innovative projects that address the UN Sustainable Development Goals.
             </p>
-            <Button 
-              size="lg" 
-              className="bg-white text-black hover:bg-white/90 font-medium shadow-lg"
-              onClick={() => document.getElementById('pitch-section')?.scrollIntoView({ behavior: 'smooth' })}
-            >
-              <Lightbulb className="w-5 h-5 mr-2" />
-              Submit Your Idea
-            </Button>
+            <div className="flex items-center justify-center gap-4 mt-6 relative z-10">
+              <Button 
+                size="lg" 
+                className="bg-white text-black hover:bg-white/90 font-medium shadow-lg"
+                onClick={() => document.getElementById('pitch-section')?.scrollIntoView({ behavior: 'smooth' })}
+              >
+                <Lightbulb className="w-5 h-5 mr-2" />
+                Submit Your Idea
+              </Button>
+
+              <Button
+                size="lg"
+                className="bg-white text-black hover:bg-white/90 font-medium shadow-lg"
+                onClick={() => document.getElementById('mentor-section')?.scrollIntoView({ behavior: 'smooth' })}
+              >
+                Become a Mentor
+              </Button>
+            </div>
           </div>
         </div>
       </section>
@@ -88,6 +99,14 @@ const Projects = () => {
           </div>
 
           <ProjectSubmissionForm />
+        </div>
+      </section>
+
+      <section id="mentor-section" className="py-12 bg-slate-50">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-2xl font-bold mb-4">Become a Mentor</h2>
+          <p className="text-muted-foreground mb-6">Guide student teams with your expertise. Fill the short form below to apply as a mentor for the SDG Mentorship Program.</p>
+          <Mentor />
         </div>
       </section>
 

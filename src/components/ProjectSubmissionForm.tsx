@@ -428,15 +428,13 @@ const ProjectSubmissionForm: React.FC = () => {
                         <SelectValue placeholder="Select branch" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="cse">Computer Science & Engineering</SelectItem>
-                        <SelectItem value="ece">Electronics & Communication</SelectItem>
-                        <SelectItem value="eee">Electrical & Electronics</SelectItem>
-                        <SelectItem value="mech">Mechanical Engineering</SelectItem>
-                        <SelectItem value="civil">Civil Engineering</SelectItem>
-                        <SelectItem value="chem">Chemical Engineering</SelectItem>
-                        <SelectItem value="it">Information Technology</SelectItem>
-                        <SelectItem value="biotech">Biotechnology</SelectItem>
-                        <SelectItem value="other">Other</SelectItem>
+                        <SelectItem value="cse-core">CSE - Core</SelectItem>
+                        <SelectItem value="cse-ai">CSE - AI</SelectItem>
+                        <SelectItem value="cse-cybersecurity">CSE - Cybersecurity</SelectItem>
+                        <SelectItem value="cse-datascience">CSE - Data Science</SelectItem>
+                        <SelectItem value="it">IT</SelectItem>
+                        <SelectItem value="ece">ECE</SelectItem>
+                        <SelectItem value="ecm">ECM</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>

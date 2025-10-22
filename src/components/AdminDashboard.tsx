@@ -31,6 +31,7 @@ interface DashboardStats {
 const AdminDashboard: React.FC = () => {
   const { adminUser, signOut } = useAuth();
   const [submissions, setSubmissions] = useState<ProjectSubmission[]>([]);
+  const [mentors, setMentors] = useState<any[]>([]);
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [selectedSubmission, setSelectedSubmission] = useState<ProjectSubmission | null>(null);
   const [filterStatus, setFilterStatus] = useState<string>('all');
@@ -43,10 +44,26 @@ const AdminDashboard: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
   const itemsPerPage = 10;
+  const [totalMentors, setTotalMentors] = useState(0);
+  const [mentorPage, setMentorPage] = useState(1);
+
+  const [activeAdminTab, setActiveAdminTab] = useState<'projects' | 'mentors'>('projects');
 
   useEffect(() => {
     loadData();
   }, [currentPage, filterStatus, searchTerm]);
+
+  useEffect(() => {
+    if (activeAdminTab === 'mentors') loadMentors();
+  }, [mentorPage, activeAdminTab]);
+
+  useEffect(() => {
+    if (activeAdminTab === 'projects') {
+      // Reset pages and reload submissions when switching back to projects
+      setCurrentPage(1);
+      loadData();
+    }
+  }, [activeAdminTab]);
 
   const loadData = async () => {
     try {
@@ -71,6 +88,22 @@ const AdminDashboard: React.FC = () => {
     } catch (error: any) {
       console.error('Failed to load data:', error);
       setError('Failed to load data. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const loadMentors = async () => {
+    try {
+      setLoading(true);
+      setError('');
+      const { mentorsApi } = await import('@/lib/supabase');
+      const { data: mentorData, count } = await mentorsApi.getMentors({ limit: itemsPerPage, offset: (mentorPage - 1) * itemsPerPage });
+      setMentors(mentorData || []);
+      setTotalMentors(count || 0);
+    } catch (error: any) {
+      console.error('Failed to load mentors:', error);
+      setError('Failed to load mentor applications.');
     } finally {
       setLoading(false);
     }
@@ -159,6 +192,22 @@ const AdminDashboard: React.FC = () => {
           <p className="text-muted-foreground">
             Welcome back, {adminUser?.name} ({adminUser?.role})
           </p>
+        </div>
+        <div className="flex items-center gap-3">
+          <div className="inline-flex rounded-md bg-muted p-1">
+            <button
+              className={`px-3 py-1 rounded-md ${activeAdminTab === 'projects' ? 'bg-white shadow' : 'bg-transparent'}`}
+              onClick={() => setActiveAdminTab('projects')}
+            >
+              Projects
+            </button>
+            <button
+              className={`px-3 py-1 rounded-md ${activeAdminTab === 'mentors' ? 'bg-white shadow' : 'bg-transparent'}`}
+              onClick={() => setActiveAdminTab('mentors')}
+            >
+              Mentors
+            </button>
+          </div>
         </div>
         <div className="flex gap-2">
           <Button
@@ -287,7 +336,8 @@ const AdminDashboard: React.FC = () => {
       </Card>
 
       {/* Submissions Table */}
-      <Card>
+      {activeAdminTab === 'projects' && (
+        <Card>
         <CardHeader>
           <CardTitle>Project Submissions ({totalCount} total)</CardTitle>
         </CardHeader>
@@ -398,7 +448,92 @@ const AdminDashboard: React.FC = () => {
             </div>
           )}
         </CardContent>
-      </Card>
+        </Card>
+      )}
+
+      {/* Mentor Applications Table */}
+      {activeAdminTab === 'mentors' && (
+        <Card>
+          <CardHeader>
+            <CardTitle>Mentor Applications ({totalMentors} total)</CardTitle>
+          </CardHeader>
+          <CardContent>
+            {loading ? (
+              <div className="flex items-center justify-center py-8">
+                <Loader2 className="w-6 h-6 animate-spin mr-2" />
+                <span>Loading mentor applications...</span>
+              </div>
+            ) : mentors.length === 0 ? (
+              <div className="text-center py-8 text-muted-foreground">No mentor applications found.</div>
+            ) : (
+              <div className="space-y-4">
+                {mentors.map((m) => (
+                  <div key={m.id} className="border rounded-lg p-4 hover:bg-muted/50 transition-colors">
+                    <div className="flex items-start justify-between">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-3 mb-2">
+                          <h3 className="font-semibold">{m.name}</h3>
+                          <Badge className="bg-gray-100 text-gray-800 border-gray-200">{m.status || 'received'}</Badge>
+                        </div>
+
+                        <div className="grid md:grid-cols-3 gap-4 text-sm text-muted-foreground mb-3">
+                          <div className="flex items-center gap-1">
+                            <User className="w-4 h-4" />
+                            {m.email}
+                          </div>
+                          <div className="flex items-center gap-1">
+                            <Calendar className="w-4 h-4" />
+                            {formatDate(m.created_at)}
+                          </div>
+                          <div className="flex items-center gap-1">
+                            <Phone className="w-4 h-4" />
+                            {m.phone || '—'}
+                          </div>
+                        </div>
+
+                        <p className="text-sm text-muted-foreground line-clamp-2">
+                          Expertise: {Array.isArray(m.expertise) ? m.expertise.join(', ') : (m.expertise || 'Not specified')}
+                        </p>
+                      </div>
+
+                      <div className="flex gap-2 ml-4">
+                        <Dialog>
+                          <DialogTrigger asChild>
+                            <Button variant="outline" size="sm">
+                              <Eye className="w-4 h-4 mr-1" />
+                              View
+                            </Button>
+                          </DialogTrigger>
+                          <DialogContent className="max-w-3xl max-h-[80vh] overflow-y-auto">
+                            <DialogHeader>
+                              <DialogTitle>{m.name}</DialogTitle>
+                            </DialogHeader>
+                            <div className="space-y-4">
+                              <div className="text-sm">
+                                <div><strong>Email:</strong> {m.email}</div>
+                                <div><strong>Phone:</strong> {m.phone || '—'}</div>
+                                <div><strong>Year / Branch:</strong> {m.year} / {m.branch}</div>
+                                <div><strong>Availability:</strong> {m.availability_per_week || '—'}</div>
+                                <div><strong>Expertise:</strong> {Array.isArray(m.expertise) ? m.expertise.join(', ') : (m.expertise || 'Not specified')}</div>
+                              </div>
+                              {m.previous_experience && (
+                                <div>
+                                  <h4 className="font-medium">Previous Experience</h4>
+                                  <p className="text-sm text-muted-foreground">{m.previous_experience}</p>
+                                </div>
+                              )}
+                            </div>
+                          </DialogContent>
+                        </Dialog>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 };
@@ -486,7 +621,7 @@ const SubmissionDetailModal: React.FC<SubmissionDetailModalProps> = ({
               <div className="space-y-2 text-sm">
                 <div><strong>Primary SDG:</strong> {submission.primary_sdg}</div>
                 <div><strong>Timeline:</strong> {submission.timeline} months</div>
-                <div><strong>Funding:</strong> {submission.funding_required}</div>
+                <div><strong>Funding:</strong> {submission.funding_approved ?? 'N/A'}</div>
                 <div>
                   <strong>Status:</strong>
                   <Badge className={`ml-2 ${getStatusColor(submission.status)}`}>
@@ -572,7 +707,7 @@ const SubmissionDetailModal: React.FC<SubmissionDetailModalProps> = ({
           <div>
             <h4 className="font-medium mb-2">Update Status</h4>
             <div className="space-y-3">
-              <Select value={newStatus} onValueChange={setNewStatus}>
+              <Select value={newStatus} onValueChange={(v) => setNewStatus(v as any)}>
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>

@@ -256,6 +256,80 @@ export const projectsApi = {
   }
 }
 
+// Mentors API
+export const mentorsApi = {
+  // Create mentor application
+  async createMentor(application: Omit<MentorApplication, 'id' | 'created_at' | 'updated_at'>) {
+    const payload = {
+      ...application,
+      expertise: application.expertise ?? null,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    }
+
+    const { data, error } = await supabase
+      .from('mentor_applications')
+      .insert([payload])
+      .select()
+      .single()
+
+    if (error) throw error
+    return data as MentorApplication
+  }
+,
+
+  // Get mentor applications with optional filters
+  async getMentors(filters?: { status?: string; search?: string; limit?: number; offset?: number }) {
+    let query: any = supabase
+      .from('mentor_applications')
+      .select('*')
+      .order('created_at', { ascending: false })
+
+    if (filters?.status && filters.status !== 'all') {
+      query = query.eq('status', filters.status)
+    }
+
+    if (filters?.search) {
+      query = query.or(`name.ilike.%${filters.search}%,email.ilike.%${filters.search}%`)
+    }
+
+    if (filters?.limit) {
+      query = query.limit(filters.limit)
+    }
+
+    if (filters?.offset) {
+      query = query.range(filters.offset, filters.offset + (filters.limit || 10) - 1)
+    }
+
+    const { data, error, count } = await query
+    if (error) throw error
+    return { data: data as MentorApplication[], count }
+  },
+
+  async getMentor(id: string) {
+    const { data, error } = await supabase
+      .from('mentor_applications')
+      .select('*')
+      .eq('id', id)
+      .single()
+
+    if (error) throw error
+    return data as MentorApplication
+  },
+
+  async updateMentor(id: string, updates: Partial<MentorApplication>) {
+    const { data, error } = await supabase
+      .from('mentor_applications')
+      .update({ ...updates, updated_at: new Date().toISOString() })
+      .eq('id', id)
+      .select()
+      .single()
+
+    if (error) throw error
+    return data as MentorApplication
+  }
+}
+
 // Authentication helpers - Simple table-based auth for demo
 export const authApi = {
   async signIn(email: string, password: string) {
@@ -299,4 +373,23 @@ export const authApi = {
     if (error) throw error
     return data as AdminUser
   }
+}
+
+export interface MentorApplication {
+  id: string
+  created_at: string
+  updated_at?: string
+
+  name: string
+  year: string
+  branch: string
+  email: string
+  phone?: string
+  expertise?: string[]
+  previous_experience?: string
+  availability_per_week?: string
+
+  status?: string
+  admin_notes?: string
+  processed_by?: string
 }
