@@ -24,6 +24,7 @@ export interface ProjectSubmission {
   title: string
   description: string
   primary_sdg: string
+  sdg_track?: string
   secondary_sdgs: string[]
   timeline: string
   expected_impact: string
@@ -31,8 +32,7 @@ export interface ProjectSubmission {
   // Team Information
   team_members: TeamMember[]
   
-  // File Attachments
-  attachments: string[]
+  // File Attachments removed
   
   // Status and Progress
   status: 'received' | 'under-review' | 'selected' | 'in-progress' | 'completed' | 'rejected'

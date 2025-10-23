@@ -14,7 +14,7 @@ import {
   BarChart3, TrendingUp, Users, CheckCircle, Clock, AlertCircle,
   LogOut, Settings, Plus, Trash2
 } from 'lucide-react';
-import { projectsApi, ProjectSubmission } from '@/lib/supabase';
+import { projectsApi, ProjectSubmission, supabase } from '@/lib/supabase';
 import { useAuth } from '@/components/AdminAuth';
 
 interface DashboardStats {
@@ -588,7 +588,6 @@ const SubmissionDetailModal: React.FC<SubmissionDetailModalProps> = ({
         <TabsList>
           <TabsTrigger value="details">Details</TabsTrigger>
           <TabsTrigger value="team">Team</TabsTrigger>
-          <TabsTrigger value="files">Files</TabsTrigger>
           <TabsTrigger value="admin">Admin</TabsTrigger>
         </TabsList>
         
@@ -682,26 +681,7 @@ const SubmissionDetailModal: React.FC<SubmissionDetailModalProps> = ({
           )}
         </TabsContent>
         
-        <TabsContent value="files" className="space-y-4">
-          {submission.attachments && submission.attachments.length > 0 ? (
-            <div className="space-y-2">
-              {submission.attachments.map((file, index) => (
-                <div key={index} className="flex items-center justify-between border rounded p-3">
-                  <div className="flex items-center gap-2">
-                    <FileText className="w-4 h-4" />
-                    <span className="text-sm">{file}</span>
-                  </div>
-                  <Button variant="outline" size="sm">
-                    <ExternalLink className="w-4 h-4 mr-1" />
-                    Download
-                  </Button>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <p className="text-muted-foreground text-center py-8">No files attached</p>
-          )}
-        </TabsContent>
+        {/* Files tab removed */}
         
         <TabsContent value="admin" className="space-y-4">
           <div>

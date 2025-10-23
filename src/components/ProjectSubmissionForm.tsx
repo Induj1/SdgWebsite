@@ -16,7 +16,7 @@ import {
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { sendConfirmationEmail } from '@/components/EmailTemplate';
-import { projectsApi } from '@/lib/supabase';
+import { projectsApi, supabase } from '@/lib/supabase';
 
 interface TeamMember {
   id: string;
@@ -33,6 +33,7 @@ interface FormData {
   registrationNumber: string;
   branch: string;
   year: string;
+  sdgTrack: string;
   
   // Project Info
   title: string;
@@ -45,8 +46,7 @@ interface FormData {
   // Team Members
   teamMembers: TeamMember[];
   
-  // Files
-  attachments: File[];
+  // Files feature removed
 }
 
 const ProjectSubmissionForm: React.FC = () => {
@@ -65,11 +65,12 @@ const ProjectSubmissionForm: React.FC = () => {
     title: '',
     primarySDG: '',
     secondarySDGs: [],
+  sdgTrack: '',
     description: '',
     timeline: '',
     impact: '',
     teamMembers: [],
-    attachments: []
+  // attachments removed
   });
 
   const totalSteps = 3;
@@ -93,6 +94,19 @@ const ProjectSubmissionForm: React.FC = () => {
     { value: 'sdg-15', label: '15 - Life on Land', color: 'bg-green-500' },
     { value: 'sdg-16', label: '16 - Peace & Justice', color: 'bg-blue-800' },
     { value: 'sdg-17', label: '17 - Partnerships', color: 'bg-blue-900' }
+  ];
+
+  const sdgTracks = [
+    { value: 'agriculture', label: 'Agriculture & Food Security 🌾 — Sustainable farming, agri-tech solutions, food waste reduction' },
+    { value: 'clean-energy', label: 'Clean Energy & Climate Action ⚡ — Renewable energy, green technologies, carbon reduction' },
+    { value: 'waste-management', label: 'Waste Management & Recycling ♻️ — Solid waste, plastic reduction, e-waste, composting' },
+    { value: 'water-sanitation', label: 'Water Conservation & Sanitation 💧 — Clean water access, efficient usage, hygiene & sanitation' },
+    { value: 'health-wellbeing', label: 'Health & Well-being ❤️ — Mental health, wellness, fitness, and healthcare access' },
+    { value: 'education-awareness', label: 'Education & Awareness 🎓 — Digital learning, SDG education, skill development, outreach' },
+    { value: 'gender-equality', label: 'Gender Equality & Inclusion ⚖️ — Empowerment initiatives, diversity & inclusion programs' },
+    { value: 'infrastructure-innovation', label: 'Sustainable Infrastructure & Innovation 🏗️ — Green buildings, campus design, IoT or tech for sustainability' },
+    { value: 'biodiversity', label: 'Biodiversity & Environment Conservation 🌿 — Tree plantation, wildlife protection, ecological preservation' },
+    { value: 'community-development', label: 'Community Development & Partnerships 🤝 — Local impact projects, collaborations, volunteering, outreach' }
   ];
 
   const exampleProject = {
@@ -137,22 +151,7 @@ const ProjectSubmissionForm: React.FC = () => {
     }));
   };
 
-  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(event.target.files || []);
-    const validFiles = files.filter(file => file.size <= 10 * 1024 * 1024); // 10MB limit
-    
-    setFormData(prev => ({
-      ...prev,
-      attachments: [...prev.attachments, ...validFiles]
-    }));
-  };
-
-  const removeFile = (index: number) => {
-    setFormData(prev => ({
-      ...prev,
-      attachments: prev.attachments.filter((_, i) => i !== index)
-    }));
-  };
+  // file upload removed from frontend
 
   const toggleSecondarySDG = (sdg: string) => {
     setFormData(prev => ({
@@ -221,8 +220,9 @@ const ProjectSubmissionForm: React.FC = () => {
         secondary_sdgs: formData.secondarySDGs,
         timeline: formData.timeline,
         expected_impact: formData.impact,
-        team_members: formData.teamMembers,
-        attachments: formData.attachments.map(file => file.name),
+    team_members: formData.teamMembers,
+  sdg_track: formData.sdgTrack,
+  // attachments removed
         status: 'received' as const,
         stage: 0,
         admin_notes: '',
@@ -231,8 +231,8 @@ const ProjectSubmissionForm: React.FC = () => {
         user_agent: navigator.userAgent
       };
 
-      // Save to Supabase
-      const savedSubmission = await projectsApi.createSubmission(submissionData);
+  // Save to Supabase (create submission)
+  const savedSubmission = await projectsApi.createSubmission(submissionData);
       
       // Send confirmation email
       try {
@@ -549,6 +549,23 @@ const ProjectSubmissionForm: React.FC = () => {
                 </div>
 
                 <div>
+                  <Label htmlFor="sdgTrack">Select the Sustainable Development Track Your Project Aligns With</Label>
+                  <p className="text-sm text-muted-foreground mb-2">Choose the single track that best matches your project's focus</p>
+                  <Select value={formData.sdgTrack} onValueChange={(value) => handleInputChange('sdgTrack', value)}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select SDG Track" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {sdgTracks.map(track => (
+                        <SelectItem key={track.value} value={track.value}>
+                          <div className="text-sm leading-tight">{track.label}</div>
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div>
                   <Label>Additional SDG Categories (Optional)</Label>
                   <p className="text-sm text-muted-foreground mb-3">
                     Select any additional SDGs your project addresses
@@ -582,58 +599,7 @@ const ProjectSubmissionForm: React.FC = () => {
                   />
                 </div>
 
-                {/* File Upload Section */}
-                <div className="space-y-4">
-                  <Label>Supporting Documents (Optional)</Label>
-                  <div className="border-2 border-dashed border-muted-foreground/25 rounded-lg p-6 text-center">
-                    <Upload className="w-8 h-8 mx-auto mb-2 text-muted-foreground" />
-                    <p className="text-sm text-muted-foreground mb-2">
-                      Attach supporting documents (PDFs, sketches, or presentations)
-                    </p>
-                    <p className="text-xs text-muted-foreground mb-4">Max 10MB per file</p>
-                    <input
-                      type="file"
-                      id="file-upload"
-                      className="hidden"
-                      multiple
-                      accept=".pdf,.doc,.docx,.ppt,.pptx,.jpg,.jpeg,.png"
-                      onChange={handleFileUpload}
-                    />
-                    <Button 
-                      type="button" 
-                      variant="outline" 
-                      onClick={() => document.getElementById('file-upload')?.click()}
-                    >
-                      <FileText className="w-4 h-4 mr-2" />
-                      Choose Files
-                    </Button>
-                  </div>
-                  
-                  {formData.attachments.length > 0 && (
-                    <div className="space-y-2">
-                      <Label>Attached Files:</Label>
-                      {formData.attachments.map((file, index) => (
-                        <div key={index} className="flex items-center justify-between bg-muted p-3 rounded">
-                          <div className="flex items-center gap-2">
-                            <FileText className="w-4 h-4" />
-                            <span className="text-sm">{file.name}</span>
-                            <span className="text-xs text-muted-foreground">
-                              ({(file.size / 1024 / 1024).toFixed(1)} MB)
-                            </span>
-                          </div>
-                          <Button
-                            type="button"
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => removeFile(index)}
-                          >
-                            <X className="w-4 h-4" />
-                          </Button>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
+                {/* Supporting documents feature removed */}
               </div>
             )}
 
@@ -684,6 +650,9 @@ const ProjectSubmissionForm: React.FC = () => {
                         <span className="font-medium">Primary SDG:</span> {
                           sdgOptions.find(s => s.value === formData.primarySDG)?.label || 'Not selected'
                         }
+                      </div>
+                      <div>
+                        <span className="font-medium">SDG Track:</span> {sdgTracks.find(t => t.value === formData.sdgTrack)?.label || 'Not selected'}
                       </div>
                       <div>
                         <span className="font-medium">Timeline:</span> {

@@ -40,8 +40,7 @@ CREATE TABLE IF NOT EXISTS project_submissions (
   -- Team Information (JSON)
   team_members JSONB DEFAULT '[]',
   
-  -- File Attachments
-  attachments TEXT[] DEFAULT '{}',
+  -- File Attachments removed
   
   -- Status and Progress
   status TEXT NOT NULL DEFAULT 'received' CHECK (status IN ('received', 'under-review', 'selected', 'in-progress', 'completed', 'rejected')),
