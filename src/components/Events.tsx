@@ -3,12 +3,55 @@ import { Calendar, MapPin, Clock, Users, ExternalLink, Filter } from 'lucide-rea
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { link } from 'fs';
 
 const Events = () => {
   const [activeTab, setActiveTab] = useState('upcoming');
 
   const events = {
     upcoming: [
+      {
+        id: 12,
+        title: "SDG Innovation Sprint",
+        description: "A two-day workshop + mock hackathon by The SDG Club, MIT Bengaluru — Day 1: Workshop on how to start with your first hackathon; Day 2: 60-minute mock hackathon simulation using Figma or similar platforms. Cash prizes worth ₹1,500 for winners and runners up.",
+        date: "October 29-30, 2025",
+        time: "Day 1: Workshop (times TBA) · Day 2: Mock Hackathon Simulation (60 minutes)",
+        venue: "MIT-BLR Campus",
+        participants: "Open to All",
+        category: "workshop",
+        sdg: [4, 9],
+        status: "Register Now",
+        countdown: "Happening Soon",
+        link: "https://forms.office.com/pages/responsepage.aspx?id=Qr2-Kf_xPUyWiAZ-NGDcH-AB2-UCsIRGmsKUSMDIwwhUMlMwT083TE5FS0tNTFZXSzA0OTdYWDBMSy4u&route=shorturl"
+      },
+      {
+        id: 13,
+        title: "Design Thinking for SDGs",
+        description: "A hands-on half-day workshop introducing design thinking methods to solve local SDG challenges. Learn ideation, rapid prototyping, and user-centered research techniques.",
+        date: "November 15, 2025",
+        time: "9:00 AM - 1:00 PM",
+        venue: "Innovation Lab",
+        participants: "Open — Limited Seats",
+        category: "workshop",
+        sdg: [4, 11],
+        status: "Register Now",
+        countdown: "2 weeks to go",
+        link: "https://mitblrsdg.club"
+      },
+      {
+        id: 14,
+        title: "Green Startup Pitch Night",
+        description: "An evening pitch event where student teams present early-stage green startup ideas to mentors and peers. Prizes and incubation guidance for standout teams.",
+        date: "December 5, 2025",
+        time: "6:00 PM - 9:00 PM",
+        venue: "MIT-BLR Auditorium",
+        participants: "Teams & Mentors",
+        category: "hackathon",
+        sdg: [8, 9, 12],
+        status: "Apply to Pitch",
+        countdown: "Coming Soon",
+        link: "https://mitblrsdg.club"
+      },
       {
         id: 2,
         title: "Sustainability Conclave",
@@ -25,16 +68,16 @@ const Events = () => {
         id: 11,
         title: "SDG Thrift Store",
         description: "Campus-wide thrift store to promote circular economy and sustainable fashion—buy, sell, and swap pre-loved items.",
-        date: "October 29, 2025",
+        date: "November 6, 2025",
         time: "10:00 AM - 6:00 PM",
         venue: "Student Activity Center",
         participants: "Open to All",
         category: "stall",
         sdg: [12, 11],
         status: "Register Now",
-        countdown: "20 days to go"
-      }
-      ,
+        countdown: "20 days to go",
+        link: "https://sdgthriftstore.vercel.app/"
+      },
       {
         id: 3,
         title: "Clean Energy Workshop",
@@ -275,14 +318,23 @@ const Events = () => {
                 </div>
 
                 {/* Action Button */}
-                <Button 
-                  className="w-full" 
-                  variant={activeTab === 'past' ? 'outline' : 'default'}
-                >
-                  {activeTab === 'past' ? 'View Highlights' : 
-                   activeTab === 'ongoing' ? 'Join Now' : 'Register'}
-                  <ExternalLink className="ml-2 h-4 w-4" />
-                </Button>
+                {event.link && activeTab !== 'past' ? (
+                  <a href={event.link} target="_blank" rel="noopener noreferrer" className="w-full block">
+                    <Button className="w-full" variant="default">
+                      {activeTab === 'ongoing' ? 'Join Now' : 'Register'}
+                      <ExternalLink className="ml-2 h-4 w-4" />
+                    </Button>
+                  </a>
+                ) : (
+                  <Button 
+                    className="w-full" 
+                    variant={activeTab === 'past' ? 'outline' : 'default'}
+                  >
+                    {activeTab === 'past' ? 'View Highlights' : 
+                     activeTab === 'ongoing' ? 'Join Now' : 'Register'}
+                    <ExternalLink className="ml-2 h-4 w-4" />
+                  </Button>
+                )}
               </CardContent>
             </Card>
           ))}
