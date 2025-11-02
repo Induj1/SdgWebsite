@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 import { projectsApi, ProjectSubmission, supabase } from '@/lib/supabase';
 import { useAuth } from '@/components/AdminAuth';
+import * as XLSX from 'xlsx';
 
 interface DashboardStats {
   total: number;
@@ -106,6 +107,83 @@ const AdminDashboard: React.FC = () => {
       setError('Failed to load mentor applications.');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleDownloadExcel = async () => {
+    try {
+      setUpdating(true);
+      
+      // Fetch all projects without pagination
+      const { data: allProjects } = await projectsApi.getSubmissions({
+        limit: 10000 // Get all projects
+      });
+
+      if (!allProjects || allProjects.length === 0) {
+        setError('No projects to download');
+        return;
+      }
+
+      // Format data for Excel
+      const excelData = allProjects.map((project, index) => ({
+        'S.No': index + 1,
+        'Submission ID': project.id,
+        'Name': project.name,
+        'Email': project.email,
+        'Phone': project.phone,
+        'Registration Number': project.registration_number,
+        'Branch': project.branch,
+        'Year': project.year,
+        'Project Title': project.title,
+        'Description': project.description,
+        'Primary SDG': project.primary_sdg,
+        'SDG Track': project.sdg_track || '',
+        'Secondary SDGs': Array.isArray(project.secondary_sdgs) ? project.secondary_sdgs.join(', ') : '',
+        'Timeline': project.timeline,
+        'Expected Impact': project.expected_impact,
+        'Team Members': Array.isArray(project.team_members) 
+          ? project.team_members.map((m: any) => `${m.name} (${m.email})`).join('; ')
+          : '',
+        'Status': project.status,
+        'Stage': project.stage,
+        'Admin Notes': project.admin_notes || '',
+        'Feedback': project.feedback || '',
+        'Assigned Mentor': project.assigned_mentor || '',
+        'Funding Approved': project.funding_approved || '',
+        'Submitted At': new Date(project.created_at).toLocaleString(),
+        'Last Updated': new Date(project.updated_at).toLocaleString()
+      }));
+
+      // Create worksheet and workbook
+      const worksheet = XLSX.utils.json_to_sheet(excelData);
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, 'Projects');
+
+      // Auto-size columns
+      const maxWidth = 50;
+      const colWidths = Object.keys(excelData[0] || {}).map(key => ({
+        wch: Math.min(
+          Math.max(
+            key.length,
+            ...excelData.map(row => String(row[key as keyof typeof row] || '').length)
+          ),
+          maxWidth
+        )
+      }));
+      worksheet['!cols'] = colWidths;
+
+      // Generate filename with timestamp
+      const timestamp = new Date().toISOString().split('T')[0];
+      const filename = `SDG_Projects_${timestamp}.xlsx`;
+
+      // Download file
+      XLSX.writeFile(workbook, filename);
+      
+    } catch (error: any) {
+      console.error('Failed to download Excel:', error);
+      setError('Failed to download Excel file. Please try again.');
+    } finally {
+      setUpdating(false);
     }
   };
 
@@ -218,9 +296,13 @@ const AdminDashboard: React.FC = () => {
             <RefreshCw className={`w-4 h-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
             Refresh
           </Button>
-          <Button variant="outline">
-            <Download className="w-4 h-4 mr-2" />
-            Export Data
+          <Button 
+            variant="outline"
+            onClick={handleDownloadExcel}
+            disabled={updating || loading}
+          >
+            <Download className={`w-4 h-4 mr-2 ${updating ? 'animate-bounce' : ''}`} />
+            {updating ? 'Downloading...' : 'Export Excel'}
           </Button>
           <Button variant="outline" onClick={signOut}>
             <LogOut className="w-4 h-4 mr-2" />
